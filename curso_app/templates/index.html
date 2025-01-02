@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gestión de Cursos</title>
+    <meta
+      name="author"
+      content="Milton F. Ruiz, Desarrollador web MERN con experiencia en creación de
+      aplicaciones y certificado en ciberseguridad, especializado en implementar buenas
+      prácticas para garantizar la seguridad en el desarrollo. Estudiante de Programación en UTN"
+    />
+    <meta
+      name="description"
+      content="Desarrollar un sistema de gestión de cursos y estudiantes utilizando programación orientada a objetos, clases y arrays en un entorno académico."
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles/styles.css') }}"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/f0e78da616.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Babylonica&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="shortcut icon"
+      href="{{ url_for('static', filename='images/gestion.ico') }}"
+      type="image/x-icon"
+    />
+    <style>
+      .contenedor-banner {
+        background: url("{{ url_for('static', filename='images/banner2.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-color: whitesmoke;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+          rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+        height: 607px;
+        margin: 0;
+        padding: 0;
+      }
+      .contenedor-formularios {
+        background: url("{{ url_for('static', filename='images/main.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+      #form-estudiante,
+      #form-curso {
+        background: url("{{ url_for('static', filename='images/agregados.jpg') }}");
+        background-size: cover;
+        background-position: center;
+      }
+      #form-editar-estudiante,
+      #form-edicion,
+      #contenedor-estadisticas,
+      #lista-cursos {
+        background: url("{{ url_for('static', filename='images/edicion.jpg') }}");
+        background-size: cover;
+        background-position: center;
+      }
+      #graficaEstudiantes {
+        background: url("{{ url_for('static', filename='images/grafico.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px -30px 36px -28px inset;
+      }
+      #contenedor-modal {
+        background: url("{{ url_for('static', filename='images/precaucion.jpg') }}");
+        background-size: cover;
+        background-position: center;
+      }
+      #valoracion-container {
+        background: url("{{ url_for('static', filename='images/valoracion.jpg') }}");
+        background-size: cover;
+        background-position: calc(100% + 120px) 10px;
+        border-radius: 3px;
+        border: 5px solid white;
+      }
+      #comentario-container {
+        background: url("{{ url_for('static', filename='images/comentario.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        border-radius: 3px;
+        border: 5px solid white;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="contenedor-banner">
+        <div class="banner-text text-center">
+          <div class="contenedor-texto-plataforma">
+            <i title="Sobrecargando..." class="fa-solid fa-bars-progress"></i>
+            <span class="texto-plataforma">PLATAFORMA </span>
+            <span class="texto-gestion"> DE GESTIÓN </span>
+            <span class="texto-educativa"> EDUCATIVA</span>
+          </div>
+          <div class="text-center col-6 m-2 presentacion">
+            <p class="texto-solucion">
+              Bienvenido
+              <span class="texto-sistema"
+                >al sistema de gestión de cursos y estudiantes. Este sistema te
+                permitirá gestionar de manera eficiente la información de tus
+                cursos y estudiantes, utilizando clases y objetos para
+                simplificar el proceso. <br />
+                Explora el proyecto que prepare para optimizar tu experiencia
+                académica. ¡Disfruta!</span
+              >
+            </p>
+          </div>
+          <div
+            class="col-sm-12 col-lg-8 col-xl-7 d-flex justify-content-center"
+          >
+            <button title="Empezar" id="link-empezar" class="btn btn-success">
+              <a id="boton-empezar" href="#main-section"
+                ><i class="fa-solid fa-play"></i>
+                <span class="texto-empezar">Empezar</span></a
+              >
+            </button>
+          </div>
+          <div class="contendor-texto-diseño">
+            <p title="Diseño: Milton F. Ruiz" class="texto-diseño text-center">
+              Diseño: Milton F. Ruiz <i class="fa-solid fa-pen-nib"></i>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="contenedor-formularios">
+        <div class="container">
+          <div id="main-section" class="row">
+            <div class="main-container col-10">
+              <div class="oculto">
+                <form id="form-curso">
+                  <h2 class="texto-h2 texto-arriba1">
+                    <i class="fa-solid fa-book-medical"></i> Registro de Curso
+                  </h2>
+                  <label for="nombre-curso"
+                    ><i class="fa-solid fa-signature"></i> Nombre</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="nombre-curso"
+                    required
+                  />
+                  <label for="profesor-curso"
+                    ><i class="fa-solid fa-chalkboard-user"></i> Profesor</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="profesor-curso"
+                    required
+                  />
+                  <button
+                    title="Agregar Curso"
+                    id="boton-agregar-curso"
+                    type="submit"
+                    class="btn btn-success"
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="texto-agregar-curso">Agregar Curso</span>
+                  </button>
+                </form>
+              </div>
+              <div class="oculto">
+                <form id="form-estudiante">
+                  <h2 class="texto-h2 texto-arriba2">
+                    <i class="fa-solid fa-user-plus"></i> Registro de Estudiante
+                  </h2>
+                  <label for="nombre-estudiante"
+                    ><i class="fa-solid fa-signature"></i> Nombre</label
+                  >
+                  <input
+                    class="form-control"
+                    type="text"
+                    id="nombre-estudiante"
+                    required
+                  />
+                  <label for="edad-estudiante"
+                    ><i class="fa-solid fa-face-smile"></i> Edad</label
+                  >
+                  <input
+                    class="form-control"
+                    type="number"
+                    id="edad-estudiante"
+                    required
+                  />
+                  <label for="nota-estudiante"
+                    ><i class="fa-solid fa-clipboard-check"></i> Nota</label
+                  >
+                  <input
+                    class="form-control"
+                    type="number"
+                    id="nota-estudiante"
+                    required
+                  />
+                  <label for="curso-estudiante"
+                    ><i class="fa-solid fa-graduation-cap"></i> Curso</label
+                  >
+                  <select class="form-control" id="curso-estudiante"></select>
+                  <button
+                    title="Agregar Estudiante"
+                    id="boton-agregar-estudiante"
+                    type="submit"
+                    class="btn btn-success"
+                  >
+                    <i class="fa-solid fa-plus"></i>
+                    <span class="texto-agregar-estudiante"
+                      >Agregar Estudiante</span
+                    >
+                  </button>
+                </form>
+              </div>
+              <div class="oculto">
+                <h2 class="texto-h2 texto-arriba3 gestion-txt">
+                  <i class="fa-solid fa-list-check"></i> Gestión de Cursos
+                </h2>
+                <div class="input-container mb-4 container">
+                  <div class="row">
+                    <div class="col">
+                      <div class="json">
+                        <button
+                          title="Exportar a JSON"
+                          id="exportar-json"
+                          class="btn btn-success"
+                        >
+                          <i class="fa-solid fa-download"></i>
+                          <span class="texto-exportar-json"
+                            >Exportar a JSON</span
+                          >
+                        </button>
+                      </div>
+                    </div>
+                    <div id="busqueda-container" class="col position-relative">
+                      <i id="fa-lupa" class="fa-solid fa-magnifying-glass"></i>
+                      <input
+                        type="text"
+                        id="busqueda-ingresada"
+                        class="form-control"
+                        placeholder="Ingrese curso, profesor o estudiante..."
+                      />
+                    </div>
+                    <div class="col contenedor-select">
+                      <select id="filtro-estudiantes" class="form-select">
+                        <option value disabled="true" selected="true">
+                          Ordenar por
+                        </option>
+                        <option value="edad">Ordenar por Edad</option>
+                        <option value="nota">Ordenar por Nota</option>
+                        <option value="nombre">Ordenar por Nombre</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div id="lista-cursos" class="table table-responsive"></div>
+              </div>
+              <div
+                id="formulario-edicion"
+                class="modal fade"
+                tabindex="-1"
+                aria-labelledby="formulario-edicion-label"
+                aria-hidden="true"
+              >
+                <div
+                  class="modal-dialog modal-lg modal-dialog-centered custom-width"
+                >
+                  <div id="container-editar-curso" class="modal-content">
+                    <div class="modal-body">
+                      <div id="form-edicion" class="row">
+                        <h2 class="texto-h2-edicion">
+                          <i class="fa-regular fa-pen-to-square"></i> Edición
+                        </h2>
+                        <h4 class="texto-h4-curso">
+                          <i class="fa-solid fa-graduation-cap"></i> Curso
+                        </h4>
+                        <div class="col-md-6">
+                          <label for="nuevo-nombre-curso">Nuevo Curso</label>
+                          <input
+                            type="text"
+                            id="nuevo-nombre-curso"
+                            class="form-control"
+                          />
+                        </div>
+                        <div class="col-md-6">
+                          <label for="nuevo-nombre-profesor"
+                            >Nuevo Profesor</label
+                          >
+                          <input
+                            type="text"
+                            id="nuevo-nombre-profesor"
+                            class="form-control"
+                          />
+                        </div>
+                        <div class="col-12">
+                          <h4 class="texto-h4-estudiante">
+                            <i class="fa-solid fa-users"></i> Estudiantes
+                          </h4>
+                          <div
+                            id="formulario-edicion-estudiante"
+                            class="modal fade"
+                            tabindex="-1"
+                            aria-labelledby="formulario-edicion-estudiante-label"
+                            aria-hidden="true"
+                          >
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div
+                                id="container-editar-estudiante"
+                                class="modal-content"
+                              >
+                                <div class="modal-body">
+                                  <div id="form-editar-estudiante">
+                                    <div
+                                      id="container-texto-editar-estudiante"
+                                      class="col-12 d-flex justify-content-between align-items-center"
+                                    >
+                                      <h5
+                                        class="modal-title"
+                                        id="formulario-edicion-estudiante-label"
+                                      >
+                                        <i class="fa-solid fa-user"></i> Editar
+                                        Estudiante
+                                      </h5>
+                                      <button
+                                        type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="modal"
+                                        aria-label="Close"
+                                      ></button>
+                                    </div>
+
+                                    <div class="row">
+                                      <div class="col">
+                                        <label for="nombre-estudiante-editar"
+                                          >Nombre</label
+                                        >
+                                        <input
+                                          class="form-control"
+                                          type="text"
+                                          id="nombre-estudiante-editar"
+                                          placeholder="Nombre"
+                                        />
+                                      </div>
+                                      <div class="col">
+                                        <label for="edad-estudiante-editar"
+                                          >Edad</label
+                                        >
+                                        <input
+                                          class="form-control"
+                                          type="number"
+                                          id="edad-estudiante-editar"
+                                          placeholder="Edad"
+                                        />
+                                      </div>
+                                      <div class="col">
+                                        <label for="nota-estudiante-editar"
+                                          >Nota</label
+                                        >
+                                        <input
+                                          class="form-control"
+                                          type="number"
+                                          id="nota-estudiante-editar"
+                                          placeholder="Nota"
+                                          step="0.1"
+                                          min="0"
+                                          max="10"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div id="modal-footer">
+                                      <button
+                                        id="guardar-edicion-estudiante"
+                                        class="btn btn-info me-1"
+                                        title="Guardar"
+                                      >
+                                        <i class="fa-solid fa-floppy-disk"></i>
+                                        Guardar
+                                      </button>
+                                      <button
+                                        id="cancelar-edicion-estudiante"
+                                        class="btn btn-secondary"
+                                        data-bs-dismiss="modal"
+                                        title="Cancelar"
+                                      >
+                                        <i class="fa-solid fa-x"></i> Cancelar
+                                      </button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div
+                            id="lista-estudiantes-edicion"
+                            class="tabla-contenedor table table-responsive"
+                          ></div>
+                        </div>
+                        <div class="col-12">
+                          <button
+                            title="Guardar"
+                            id="guardar-edicion"
+                            class="btn btn-info"
+                          >
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            <span class="texto-guardar-edicion">Guardar</span>
+                          </button>
+                          <button
+                            title="Cancelar"
+                            id="cancelar-edicion"
+                            class="btn btn-secondary"
+                          >
+                            <i class="fa-solid fa-x"></i>
+                            <span class="texto-cancelar-edicion">Cancelar</span>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                id="modal-confirmacion"
+                class="modal fade"
+                tabindex="-1"
+                aria-labelledby="modalConfirmacionLabel"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                  <div class="modal-content" id="contenedor-modal">
+                    <p id="mensaje-confirmacion"></p>
+                    <div id="container-estas-seguro">
+                      <button id="btn-confirmar" class="btn btn-danger">
+                        <i class="fa-solid fa-skull-crossbones"></i> Aceptar
+                      </button>
+                      <button id="btn-cancelar" class="btn btn-secondary">
+                        <i class="fa-solid fa-x"></i> Cancelar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="lista-estudiantes-edicion"></div>
+              <div class="oculto">
+                <div
+                  id="contenedor-estadisticas"
+                  class="table table-responsive"
+                >
+                  <h2 class="texto-h2-estadisticas">
+                    <i class="fa-solid fa-chart-simple"></i> Estadísticas
+                    Generales
+                  </h2>
+                  <div class="d-flex">
+                    <div class="col me-3" id="contenedor-grafica">
+                      <canvas
+                        id="graficaEstudiantes"
+                        style="display: block; width: 100%; height: 250px"
+                      ></canvas>
+                    </div>
+                    <div class="col">
+                      <h2 class="texto-h2-informacion">
+                        <i class="fa-solid fa-circle-info"></i> Información del
+                        Sistema
+                      </h2>
+                      <table id="tabla-estadisticas" style="display: table">
+                        <thead>
+                          <tr id="tabla-estadisticas-tr">
+                            <th>Estudiantes</th>
+                            <th>Promedio</th>
+                            <th>Cursos</th>
+                            <th>Mejor Curso</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr id="tabla-estadisticas-subtr">
+                            <td id="total-estudiantes"></td>
+                            <td id="promedio-general"></td>
+                            <td id="total-cursos"></td>
+                            <td id="mejor-curso"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <p id="ultima-actualizacion"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="boton-arriba" class="btn btn-light" title="Volver arriba">
+        <i class="fa-solid fa-arrow-up"></i>
+      </button>
+      <a
+        href="https://wa.me/3413245896"
+        target="_blank"
+        class="boton-whatsapp"
+        title="Enviar WhatsApp"
+      >
+        <i class="fa-brands fa-whatsapp"></i>
+      </a>
+      <footer class="footer">
+        <div class="footer-content col-10">
+          <div class="footer-redes col">
+            <h3 class="h3-mis-redes">
+              <i class="fa-solid fa-share-nodes"></i>
+              <span class="texto-mis-redes">Mis redes</span>
+            </h3>
+            <div class="footer-subredes">
+              <a
+                title="LinkedIn"
+                href="https://www.linkedin.com/in/miltonfruiz/"
+                target="_blank"
+                class="social-link"
+                ><i class="fa-brands fa-linkedin"></i
+              ></a>
+              <a
+                title="GitHub"
+                href="https://github.com/miltonfruiz"
+                target="_blank"
+                class="social-link"
+                ><i class="fa-brands fa-github"></i
+              ></a>
+              <a
+                title="Instagram"
+                href="https://www.instagram.com/miltonfrdev/"
+                target="_blank"
+                class="social-link"
+                ><i class="fa-brands fa-instagram"></i
+              ></a>
+              <a
+                title="Twitter"
+                href="https://x.com/mfrok24"
+                target="_blank"
+                class="social-link"
+                ><i class="fa-brands fa-x-twitter"></i
+              ></a>
+              <a
+                title="Discord"
+                href="https://discord.gg/evVPHr7h"
+                target="_blank"
+                class="social-link"
+                ><i class="fa-brands fa-discord"></i
+              ></a>
+            </div>
+          </div>
+          <div class="footer-contacto col">
+            <h3 class="texto-contacto">
+              <i class="fa-regular fa-address-book"></i>
+              <span class="texto-contacto-span">Contacto</span>
+            </h3>
+            <p class="info-redes">
+              <a
+                href="mailto:miltonfruizok@gmail.com"
+                target="_blank"
+                class="email-link"
+                ><i class="fa-solid fa-envelope"></i>
+                <span class="texto-email">miltonfruizok@gmail.com</span>
+              </a>
+            </p>
+            <p class="info-redes-cel">
+              <i class="fa-solid fa-phone"></i>
+              <span class="texto-celular">Celular: 341-3245896</span>
+            </p>
+          </div>
+          <div class="footer-valoracion col">
+            <button
+              id="abrir-modal"
+              class="h3-valoracion btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalValoracion"
+            >
+              <i class="fa-solid fa-star"></i>
+              <span class="texto-experiencia-usuario">Experiencia</span>
+            </button>
+            <button
+              id="mostrar-comentarios"
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#modalComentarios"
+            >
+              <i class="fa-solid fa-comments"></i>
+              <span class="texto-comentarios">Comentarios</span>
+            </button>
+
+            <!-- Modal Bootstrap -->
+            <div
+              class="modal fade"
+              id="modalValoracion"
+              tabindex="-1"
+              aria-labelledby="modalValoracionLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div id="valoracion-container" class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalValoracionLabel">
+                      <i class="fa-solid fa-star-half-stroke"></i> Valoración de
+                      página
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="valoracion-form">
+                      <div class="mb-3">
+                        <label
+                          id="correo-valoracion"
+                          for="correo"
+                          class="form-label"
+                          ><i class="fa-solid fa-envelope"></i> Correo
+                          electrónico</label
+                        >
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="correo"
+                          name="correo"
+                          placeholder="tuemail@ejemplo.com"
+                          required
+                        />
+                      </div>
+                      <div class="mb-3">
+                        <label
+                          id="comentario-valoracion"
+                          for="comentario"
+                          class="form-label"
+                          ><i class="fa-solid fa-comments"></i>
+                          Comentario</label
+                        >
+                        <textarea
+                          class="form-control"
+                          id="comentario"
+                          name="comentario"
+                          rows="4"
+                          placeholder="Escribe tu comentario aquí..."
+                          required
+                        ></textarea>
+                      </div>
+                      <div class="mb-3">
+                        <label
+                          id="puntuacion-valoracion"
+                          for="valoracion"
+                          class="form-label"
+                          ><i class="fa-solid fa-wand-magic-sparkles"></i>
+                          Puntuación</label
+                        >
+                        <select
+                          class="form-select"
+                          id="valoracion"
+                          name="valoracion"
+                          required
+                        >
+                          <option value="" disabled selected>
+                            Selecciona una puntuación
+                          </option>
+                          <option value="1">1 - Muy Mala</option>
+                          <option value="2">2 - Mala</option>
+                          <option value="3">3 - Regular</option>
+                          <option value="4">4 - Buena</option>
+                          <option value="5">5 - Excelente</option>
+                        </select>
+                      </div>
+                      <button
+                        id="enviar-valoracion"
+                        type="submit"
+                        class="btn btn-success"
+                      >
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span class="texto-enviar-valoracion"
+                          >Enviar Valoración</span
+                        >
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="modal fade"
+              id="modalComentarios"
+              tabindex="-1"
+              aria-labelledby="modalComentariosLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-scrollable">
+                <div id="comentario-container" class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="modalComentariosLabel">
+                      <i class="fa-solid fa-comments"></i> Comentarios de
+                      Usuarios
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div id="promedio-container" class="my-5 text-center">
+                      <p class="text-muted text-center">Cargando promedio...</p>
+                    </div>
+                    <hr />
+                    <div id="comentarios-container">
+                      <p class="text-muted text-center">
+                        Cargando comentarios...
+                      </p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      id="cerrar-comentarios"
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      <i class="fa-solid fa-x"></i>
+                      <span class="texto-cerrar-comentarios">Cerrar</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <p class="copyright">
+            <i class="fa-regular fa-copyright"></i> 2024 Milton F. Ruiz -
+            Sistema de Gestión de Cursos
+          </p>
+        </div>
+      </footer>
+    </main>
+    <script
+      type="module"
+      src="{{ url_for('static', filename='js/app.js') }}"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
